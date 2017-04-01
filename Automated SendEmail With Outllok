@@ -1,0 +1,41 @@
+Option Explicit 
+ 
+Sub SendMail() 
+     
+    Dim olApp As Outlook.Application 
+    Dim olMail As Outlook.MailItem 
+    Dim blRunning As boolean 
+     
+     'get application
+    blRunning=True 
+    On Error Resume Next 
+    Set olApp = GetObject(, "Outlook.Application") 
+    If olApp Is Nothing Then 
+        Set olApp = New Outlook.Application 
+        blRunning=False 
+    End If 
+    On Error Goto 0 
+     
+    Set olMail = olApp.CreateItem(olMailItem) 
+    With olMail 
+         'Specify the email subject
+        .Subject = "My email with attachment" 
+         'Specify who it should be sent to
+         'Repeat this line to add further recipients
+        .Recipients.Add "name@host.com" 
+         'specify the file to attach
+         'repeat this line to add further attachments
+        .Attachments.Add "c:\test.txt" 
+         'specify the text to appear in the email
+        .Body = "Here is an email" 
+         'Choose which of the following 2 lines to have commented out
+        .Display 'This will display the message for you to check and send yourself
+         '.Send ' This will send the message straight away
+    End With 
+     
+    If Not blRunning Then olApp.Quit 
+     
+    Set olApp=Nothing 
+    Set olMail=Nothing 
+     
+End Sub 
